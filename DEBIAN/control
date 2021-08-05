@@ -1,0 +1,5 @@
+Package: smr-k8s
+Version: 1.0.0
+Architecture: amd64
+Maintainer: sea-machines.com
+Description: Sea Machines AC server container platform

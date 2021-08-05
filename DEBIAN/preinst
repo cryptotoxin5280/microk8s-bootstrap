@@ -1,0 +1,4 @@
+#!/bin/bash
+
+# Install MicroK8s
+sudo snap install microk8s

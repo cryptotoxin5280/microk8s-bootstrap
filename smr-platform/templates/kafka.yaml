@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kafka
+  labels:
+    app: kafka
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: kafka
+  template:
+    metadata:
+      labels:
+        app: kafka
+    spec:
+      hostNetwork: true
+      dnsPolicy: ClusterFirstWithHostNet
+      containers:
+      - name: kafka
+        image: bitnami/kafka:2.8.0
+        ports:
+        - containerPort: 9092
+        env:
+        - name: ALLOW_PLAINTEXT_LISTENER
+          value: 'yes'
+        - name: KAFKA_BROKER_ID
+          value: '1'
+        - name: KAFKA_CFG_LISTENERS
+          value: 'PLAINTEXT://:9092'
+        - name: KAFKA_ADVERTISED_LISTENERS
+          value: 'PLAINTEXT://172.31.54.4:9092'
+        - name: KAFKA_ZOOKEEPER_CONNECT
+          value: 'argo:2181'
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: kafka-service
+spec:
+  selector:
+    app: kafka
+  type: NodePort
+  ports:
+  - protocol: TCP
+    port: 9092
+    targetPort: 9092
+    nodePort: 30001
